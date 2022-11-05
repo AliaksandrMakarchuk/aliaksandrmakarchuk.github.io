@@ -14,18 +14,17 @@ import { GameObjects } from "./Game/Models/GameObjects.js";
 import { BulletsMoveComponent } from "./Game/Movement/BulletsMoveComponent.js";
 import { ShipMoveComponent } from "./Game/Movement/ShipMoveComponent.js";
 import { ShipBulletVisibilityChecker } from "./Game/Render/VisibilityModule/ShipBulletVisibilityChecker.js";
-import { UserInputyModule } from "./Game/UserInputModule/UserInputModule.js";
+import { UserGameInputModule } from "./Game/UserInputModule/UserGameInputModule.js";
 import { MisteryBotVisibilityChecker } from "./Game/Render/VisibilityModule/MisteryBotVisibilityChecker.js";
 import { MovementModule } from "./Engine/Movement/MovementModule.js";
 import { RenderModule } from "./Engine/Render/RenderModule.js";
 import { CollisionModule } from "./Engine/Collision/CollisionModule.js";
 import { VisibilityModule } from "./Engine/Render/VisibilityModule/VisibilityModule.js";
 import { GameLogicComponentsFactory } from "./Game/GameLogic/GameLogicComponentsFactory.js";
-import { RanGameState } from "./Game/State/RanGameState.js";
 import { UserInputEvent } from "./Game/UserInputModule/UserInputEvent.js";
 import { Directions } from "./Directions.js";
 import { BotMovementOriginal } from "./Game/Movement/Algorithms/BotMovementOriginal.js";
-import { PrintModule, TextPosition } from "./Engine/Printer/PrintModule.js";
+import { TextPosition } from "./Engine/Printer/PrintModuleBase.js";
 import { ScorePrintComponent } from "./Game/Printer/ScorePrintComponent.js";
 import { DateTimePrintComponent } from "./Game/Printer/DateTimePrintComponent.js";
 import { FpsPrintComponent } from "./Game/Printer/FpsPrintComponent.js";
@@ -36,6 +35,15 @@ import { ShipHealthPrintComponent } from "./Game/Printer/ShipHealthPrintComponen
 import { BotsGeneratorV2 } from "./Game/ObjectsGenerators/BotsGeneratorV2.js";
 import { DebugPrintComponent } from "./Game/Printer/DebugPrintComponent.js";
 import { DebugComponent } from "./DebugComponent.js";
+import { MenuItemPrintComponet } from "./Game/Printer/MenuItemPrintComponent.js";
+import { MenuItem } from "./Game/Menu/MenuItem.js";
+import { MenuPrinter } from "./Engine/Menu/MenuPrinter.js";
+import { MenuPrintModule } from "./Engine/Printer/MenuPirntModule.js";
+import { PrintModule } from "./Engine/Printer/PrintModule.js";
+import { EngineStateFactory } from "./Game/State/EngineStateFactory.js";
+import { UserMenuInputModule } from "./Game/UserInputModule/UserMenuInputModule.js";
+import { PausedGameState } from "./Game/State/PausedGameState.js";
+import { MenuBuilder } from "./Game/Menu/MenuBuilder.js";
 export class Game {
     constructor(window) {
         //#region Configure canvas
@@ -117,7 +125,7 @@ export class Game {
         let debugComponent = new DebugComponent();
         let gameLogicComponentsFactory = new GameLogicComponentsFactory();
         let gameLogicModule = new GameLogicModule(gameLogicComponentsFactory.GenerateComponents(timeModule, gameObjects, debugComponent));
-        this._userInputModule = new UserInputyModule(ship, gameObjects.GetCannonBullets(), audioModule, shipMoveComponent);
+        let userGameInputModule = new UserGameInputModule(ship, gameObjects.GetCannonBullets(), audioModule, shipMoveComponent);
         let printComponents = [
             new DateTimePrintComponent(TextPosition.LEFT | TextPosition.TOP, false),
             new SpeedPrintComponet(botsMovementAlgorithm, TextPosition.RIGHT | TextPosition.TOP, false),
@@ -127,13 +135,31 @@ export class Game {
             new DebugPrintComponent(debugComponent, TextPosition.LEFT | TextPosition.BOTTOM, true)
         ];
         let printModule = new PrintModule(printer, canvasArea, printComponents);
-        this._engine = new Engine(window, canvasArea, renderModule, collisionModule, movementModule, audioModule, visibilityModule, fpsCalculator, printer, gameObjects, gameLogicModule, this._userInputModule, (e) => new RanGameState(e, gameObjects, scoreCalculator), printModule, timeModule);
+        let engineStateFactory;
+        let titlePrintComponent = new MenuItemPrintComponet(new MenuItem(0, "MENU", false, _ => { }), TextPosition.LEFT | TextPosition.TOP);
+        let startTheGameAction = e => {
+            e.ChangeEngineState(engineStateFactory.GetEngineState(1));
+            e.TogglePause();
+        };
+        let menuBuilder = new MenuBuilder();
+        menuBuilder
+            .AddMenuItem("Item 1")
+            .SelectItem()
+            .AddMenuItem("Item #2")
+            .AddMenuItem("Start the Game")
+            .SetAction(startTheGameAction);
+        let menu = menuBuilder.Build();
+        let menuItemPrintComponents = menu.MenuItems.map(item => {
+            return new MenuItemPrintComponet(item, TextPosition.LEFT | TextPosition.TOP);
+        });
+        let menuPrintModule = new MenuPrintModule(printer, canvasArea, menuItemPrintComponents, titlePrintComponent);
+        let menuPrinter = new MenuPrinter(context, canvasArea, menuPrintModule);
+        let userMenuInputModule = new UserMenuInputModule(audioModule, menu);
+        engineStateFactory = new EngineStateFactory(userGameInputModule, userMenuInputModule);
+        this._engine = new Engine(window, canvasArea, renderModule, collisionModule, movementModule, audioModule, visibilityModule, fpsCalculator, printer, gameObjects, gameLogicModule, (e) => new PausedGameState(e, gameObjects, scoreCalculator), printModule, timeModule, menuPrinter, engineStateFactory.GetEngineState(0));
         document.addEventListener('keydown', (e) => this._engine.HandleUserInput(new UserInputEvent(e, false)));
         document.addEventListener('keyup', (e) => this._engine.HandleUserInput(new UserInputEvent(e, true)));
         audioModule.EnableAudio();
-    }
-    get UserInputModule() {
-        return this._userInputModule;
     }
     Start() {
         this._engine.Start();

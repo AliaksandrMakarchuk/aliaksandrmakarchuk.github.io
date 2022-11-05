@@ -33,4 +33,7 @@ export class AudioModuleBase {
         }
         this._gameOverAudio.play();
     }
+    PlaySelectMenuItem() {
+        //TODO: Implement
+    }
 }

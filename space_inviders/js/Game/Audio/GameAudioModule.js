@@ -28,7 +28,7 @@ export class GameAudioModule extends GameAudioModuleBase {
     InitializeBackgroundAudio() {
         throw new Error("Method not implemented.");
     }
-    PlayShipFire() {
+    PlayCannonFire() {
         if (!this.IsEnabled) {
             return;
         }

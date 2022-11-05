@@ -10,7 +10,7 @@ export class StoppedGameState {
     TogglePause() { }
     Stop() { }
     UpdateState(_gameObjects) { }
-    GoNextFrame() { }
+    ShowNextFrame() { }
     PrintStateInfo() {
         this._engine.PrintStop();
     }

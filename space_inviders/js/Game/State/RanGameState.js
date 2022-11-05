@@ -9,13 +9,13 @@ export class RanGameState {
         this._scoreCalculator = scoreCalculator;
         this._gameObjects = gameObjects;
         this._engine.PlayAudio();
-        this._engine.GoNextFrame();
+        this._engine.ShowNextFrame();
     }
     TogglePause() {
-        this._engine.ChangeState(new PausedGameState(this._engine, this._gameObjects, this._scoreCalculator));
+        this._engine.ChangeGameState(new PausedGameState(this._engine, this._gameObjects, this._scoreCalculator));
     }
     Stop() {
-        this._engine.ChangeState(new StoppedGameState(this._engine, this._gameObjects));
+        this._engine.ChangeGameState(new StoppedGameState(this._engine, this._gameObjects));
     }
     UpdateState() {
         if (!this._gameObjects.GetCannon().IsAlive || this._gameObjects.GetBots().length === 0) {
@@ -23,7 +23,7 @@ export class RanGameState {
         }
     }
     PrintStateInfo() { }
-    GoNextFrame() {
-        this._engine.GoNextFrame();
+    ShowNextFrame() {
+        this._engine.ShowNextFrame();
     }
 }

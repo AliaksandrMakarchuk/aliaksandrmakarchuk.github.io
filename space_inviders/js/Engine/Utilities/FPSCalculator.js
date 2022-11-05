@@ -16,13 +16,17 @@ export class FPSCalculator {
     }
     UpdateFps(secondsPassed) {
         let newFps = Math.round(1 / secondsPassed);
+        // strange
+        // never seen this before add Menu
+        if (newFps >= 1000) {
+            return;
+        }
         let valueRepeating = this._fpsValues.find((v) => { return v.Value === newFps; });
         if (valueRepeating === undefined) {
             valueRepeating = new ValueRepeating(newFps);
             this._fpsValues.push(valueRepeating);
+            return;
         }
-        else {
-            valueRepeating.IncreaseRepeating();
-        }
+        valueRepeating.IncreaseRepeating();
     }
 }

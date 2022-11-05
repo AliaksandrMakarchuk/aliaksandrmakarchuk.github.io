@@ -37,8 +37,8 @@ export class TextSize {
 }
 export class Printer {
     constructor(context, width, height) {
-        this._textFillStyle = "white";
-        this._textFont = "18px PixelFont";
+        this._defaultTextFillStyle = "white";
+        this._defaultTextFont = "18px PixelFont";
         this._context = context;
         this._width = width;
         this._height = height;
@@ -63,8 +63,11 @@ export class Printer {
         this._context.fillText(pauseText, this._width / 2, this._height / 2);
     }
     PrintText(x, y, text, positioning) {
-        this._context.fillStyle = this._textFillStyle;
-        this._context.font = this._textFont;
+        return this.PrintColoredText(x, y, text, positioning, this._defaultTextFillStyle, this._defaultTextFont);
+    }
+    PrintColoredText(x, y, text, positioning, textFillStyle, textFont) {
+        this._context.fillStyle = textFillStyle === undefined ? this._defaultTextFillStyle : textFillStyle;
+        this._context.font = textFont === undefined ? this._defaultTextFont : textFont;
         this._context.textBaseline = this.GetTextBaseline(positioning);
         this._context.textAlign = this.GetTextAlign(positioning);
         let metrics = this._context.measureText(text);

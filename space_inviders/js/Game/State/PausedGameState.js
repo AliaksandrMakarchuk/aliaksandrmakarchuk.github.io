@@ -11,14 +11,14 @@ export class PausedGameState {
         this._engine.PauseAudio();
     }
     TogglePause() {
-        this._engine.ChangeState(new RanGameState(this._engine, this._gameObjects, this._scoreCalculator));
+        this._engine.ChangeGameState(new RanGameState(this._engine, this._gameObjects, this._scoreCalculator));
     }
     Stop() {
-        this._engine.ChangeState(new StoppedGameState(this._engine, this._gameObjects));
+        this._engine.ChangeGameState(new StoppedGameState(this._engine, this._gameObjects));
     }
     UpdateState(_gameObjects) { }
     PrintStateInfo() {
         this._engine.PrintPause();
     }
-    GoNextFrame() { }
+    ShowNextFrame() { }
 }
