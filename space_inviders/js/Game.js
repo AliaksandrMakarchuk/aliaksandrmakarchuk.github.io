@@ -36,21 +36,20 @@ import { BotsGeneratorV2 } from "./Game/ObjectsGenerators/BotsGeneratorV2.js";
 import { DebugPrintComponent } from "./Game/Printer/DebugPrintComponent.js";
 import { DebugComponent } from "./DebugComponent.js";
 import { MenuItemPrintComponet } from "./Game/Printer/MenuItemPrintComponent.js";
-import { MenuItem } from "./Game/Menu/MenuItem.js";
 import { MenuPrinter } from "./Engine/Menu/MenuPrinter.js";
-import { MenuPrintModule } from "./Engine/Printer/MenuPirntModule.js";
 import { PrintModule } from "./Engine/Printer/PrintModule.js";
 import { EngineStateFactory } from "./Game/State/EngineStateFactory.js";
 import { UserMenuInputModule } from "./Game/UserInputModule/UserMenuInputModule.js";
 import { PausedGameState } from "./Game/State/PausedGameState.js";
 import { MenuBuilder } from "./Game/Menu/MenuBuilder.js";
+import { MenuPrintModule } from "./Engine/Printer/MenuPrintModule.js";
 export class Game {
     constructor(window) {
         //#region Configure canvas
-        var width = window.innerWidth
+        const width = window.innerWidth
             || document.documentElement.clientWidth
             || document.body.clientWidth;
-        var height = window.innerHeight
+        const height = window.innerHeight
             || document.documentElement.clientHeight
             || document.body.clientHeight;
         let fieldWidth = width - 20;
@@ -82,11 +81,11 @@ export class Game {
         let gameOverAudioHtmlElement = new Audio();
         gameOverAudioHtmlElement.id = "game_over";
         gameOverAudioHtmlElement.preload = "auto";
-        gameOverAudioHtmlElement.src = "game_over.mp3";
+        gameOverAudioHtmlElement.src = "js/Engine/Assets/Audio/game_over.mp3";
         let backgroundAudioHtmlElement = new Audio();
         backgroundAudioHtmlElement.id = "background";
         backgroundAudioHtmlElement.preload = "auto";
-        backgroundAudioHtmlElement.src = "background.mp3";
+        backgroundAudioHtmlElement.src = "js/Engine/Assets/Audio/background.mp3";
         backgroundAudioHtmlElement.loop = true;
         let audioArea = document.getElementById("audio_area");
         let audioModule = new GameAudioModule(document, audioArea, gameOverAudioHtmlElement, backgroundAudioHtmlElement);
@@ -136,7 +135,6 @@ export class Game {
         ];
         let printModule = new PrintModule(printer, canvasArea, printComponents);
         let engineStateFactory;
-        let titlePrintComponent = new MenuItemPrintComponet(new MenuItem(0, "MENU", false, _ => { }), TextPosition.LEFT | TextPosition.TOP);
         let startTheGameAction = e => {
             e.ChangeEngineState(engineStateFactory.GetEngineState(1));
             e.TogglePause();
@@ -152,7 +150,7 @@ export class Game {
         let menuItemPrintComponents = menu.MenuItems.map(item => {
             return new MenuItemPrintComponet(item, TextPosition.LEFT | TextPosition.TOP);
         });
-        let menuPrintModule = new MenuPrintModule(printer, canvasArea, menuItemPrintComponents, titlePrintComponent);
+        let menuPrintModule = new MenuPrintModule(printer, canvasArea, menuItemPrintComponents, "SPACE_INVIDERS", TextPosition.LEFT | TextPosition.TOP);
         let menuPrinter = new MenuPrinter(context, canvasArea, menuPrintModule);
         let userMenuInputModule = new UserMenuInputModule(audioModule, menu);
         engineStateFactory = new EngineStateFactory(userGameInputModule, userMenuInputModule);
@@ -171,9 +169,9 @@ export class Game {
 window.onpageshow = () => {
     // this is used ONLY to make sure that font is loaded!!!!
     // actually concrete font is uploaded via .css
-    var junction_font = new FontFace('myFont', 'url(./js/Engine/Assets/Fonts/myFont2.ttf)');
+    let junction_font = new FontFace('myFont', 'url(./js/Engine/Assets/Fonts/myFont2.ttf)');
     junction_font.load().then(function (loaded_face) {
-        console.log(`${loaded_face}`);
+        console.log(loaded_face);
         // loaded_face holds the loaded FontFace
         // document.fonts.add(loaded_face);
         document.body.style.fontFamily = '"myFont", Arial';

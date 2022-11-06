@@ -92,23 +92,23 @@ export class Utils {
         }
         return 0;
     }
-    GetX(lastX, printComponent, canvasArea, textSize, margin) {
-        if ((printComponent.Position & TextPosition.LEFT) === TextPosition.LEFT) {
-            return printComponent.NewLine ? margin : lastX + textSize.Width + margin;
+    GetX(lastX, componentPosition, onNewLine, canvasArea, textSize, margin) {
+        if ((componentPosition & TextPosition.LEFT) === TextPosition.LEFT) {
+            return onNewLine ? margin : lastX + textSize.Width + margin;
         }
-        else if ((printComponent.Position & TextPosition.RIGHT) === TextPosition.RIGHT) {
-            return printComponent.NewLine ? canvasArea.Width - margin : lastX - textSize.Width - margin;
+        else if ((componentPosition & TextPosition.RIGHT) === TextPosition.RIGHT) {
+            return onNewLine ? canvasArea.Width - margin : lastX - textSize.Width - margin;
         }
         else {
             throw new Error("Text position should be either LEFT or RIGHT");
         }
     }
-    GetY(lastY, printComponent, textSize, margin) {
-        if ((printComponent.Position & TextPosition.TOP) === TextPosition.TOP) {
-            return printComponent.NewLine ? lastY + textSize.Height + margin : lastY;
+    GetY(lastY, componentPosition, onNewLine, textSize, margin) {
+        if ((componentPosition & TextPosition.TOP) === TextPosition.TOP) {
+            return onNewLine ? lastY + textSize.Height + margin : lastY;
         }
-        else if ((printComponent.Position & TextPosition.BOTTOM) === TextPosition.BOTTOM) {
-            return printComponent.NewLine ? lastY - textSize.Height - margin : lastY;
+        else if ((componentPosition & TextPosition.BOTTOM) === TextPosition.BOTTOM) {
+            return onNewLine ? lastY - textSize.Height - margin : lastY;
         }
         else {
             throw new Error("Text position should be either TOP or BOTTOM");

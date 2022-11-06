@@ -7,6 +7,9 @@ export class MenuPrintComponentBase extends PrintComponentBase {
         super(position, isNewLine);
         this._menuItem = menuItem;
     }
+    get MenuItem() {
+        return this._menuItem;
+    }
     get IsSelected() {
         return this._menuItem.IsSelected;
     }

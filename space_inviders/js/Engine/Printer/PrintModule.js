@@ -15,8 +15,8 @@ export class PrintModule extends PrintModuleBase {
         y = utils.GetInitialY(position, this.CanvasArea, this.Printer);
         textSize = new TextSize(0, 0);
         componentsByGroup.forEach(component => {
-            x = utils.GetX(x, component, this.CanvasArea, textSize, this.Printer.Margin);
-            y = utils.GetY(y, component, textSize, this.Printer.Margin);
+            x = utils.GetX(x, component.Position, component.NewLine, this.CanvasArea, textSize, this.Printer.Margin);
+            y = utils.GetY(y, component.Position, component.NewLine, textSize, this.Printer.Margin);
             textSize = this.Printer.PrintText(x, y, component.Text, utils.GetPositioning(component.Position));
         });
     }

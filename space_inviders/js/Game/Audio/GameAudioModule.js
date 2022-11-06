@@ -14,13 +14,13 @@ export class GameAudioModule extends GameAudioModuleBase {
     InitializeGameSpecificAudio() {
         this._shipFireAudio.id = "ship_fire";
         this._shipFireAudio.preload = "auto";
-        this._shipFireAudio.src = "fire.mp3";
+        this._shipFireAudio.src = "js/Engine/Assets/Audio/fire.mp3";
         this._hitAudio.id = "hit";
         this._hitAudio.preload = "auto";
-        this._hitAudio.src = "hit.mp3";
+        this._hitAudio.src = "js/Engine/Assets/Audio/hit.mp3";
         this._helpBotHitAudio.id = "help_bot_hit";
         this._helpBotHitAudio.preload = "auto";
-        this._helpBotHitAudio.src = "help_bot_hit.mp3";
+        this._helpBotHitAudio.src = "js/Engine/Assets/Audio/help_bot_hit.mp3";
         this.AudioElement.appendChild(this._shipFireAudio);
         this.AudioElement.appendChild(this._hitAudio);
         this.AudioElement.appendChild(this._helpBotHitAudio);
