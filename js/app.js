@@ -279,7 +279,7 @@ var Field = (function () {
         this._context = context;
     }
     Field.prototype.Draw = function () {
-        this._context.fillStyle = 'black';
+        this._context.fillStyle = 'gray';
         this._context.beginPath();
         this._context.fillRect(0, 0, this._canvas.width, this._canvas.height);
         this._context.fill();
