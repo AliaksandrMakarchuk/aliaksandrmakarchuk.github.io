@@ -1,5 +1,5 @@
 # Simple workflow for deploying static content to GitHub Pages
-name: Deploy static content to Pages
+name: Download Artifact
 
 on:
   # Allows you to run this workflow manually from the Actions tab
@@ -25,7 +25,7 @@ jobs:
         uses: actions/download-artifact@v2.1.1
         with:
           # Artifact name
-          name: dot_net_build
+          name: github-pages
       - run: ls -al
       - run: echo "Completed"
           
