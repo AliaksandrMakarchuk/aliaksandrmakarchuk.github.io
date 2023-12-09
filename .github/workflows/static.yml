@@ -43,6 +43,7 @@ jobs:
       uses: actions/upload-pages-artifact@v2.0.0
       with:
         path: ./snake/_site/
+        name: github-pages
         
   # Single deploy job since we're just deploying
   # deploy:
